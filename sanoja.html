@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Friends Gallery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(120deg, #a18cd1 0%, #fbc2eb 100%);
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(6px);
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    header h1 {
+      margin: 0;
+      font-weight: 700;
+      font-size: 32px;
+      color: #333;
+    }
+    header p {
+      margin: 8px 0 0;
+      font-size: 16px;
+      color: #555;
+    }
+    .search-box {
+      margin: 25px auto;
+      text-align: center;
+    }
+    #search {
+      padding: 12px;
+      width: 300px;
+      border-radius: 30px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      transition: box-shadow 0.3s ease, transform 0.2s ease;
+    }
+    #search:focus {
+      outline: none;
+      box-shadow: 0 0 10px #a18cd1;
+      transform: scale(1.02);
+    }
+    .tag-list {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .tag-list button {
+      margin: 5px;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      background: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+    }
+    .friend {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: 15px;
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(4px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s, opacity 0.5s ease;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .friend.show {
+      opacity: 1;
+      animation: fadeIn 0.6s ease forwards;
+    }
+    .friend:hover {
+      transform: scale(1.08);
+    }
+    .friend img {
+      width: 160px;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      margin-bottom: 10px;
+    }
+    .friend p {
+      margin: 0;
+      font-weight: 600;
+      font-size: 16px;
+      color: #333;
+    }
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      padding: 20px;
+      background: rgba(255,255,255,0.7);
+      font-size: 14px;
+      color: #444;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .modal img {
+      max-width: 80%;
+      max-height: 80%;
+      border-radius: 10px;
+    }
+    .modal .controls {
+      margin-top: 10px;
+    }
+    .modal .controls button {
+      padding: 10px 15px;
+      margin: 0 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>💖 My Friends Gallery 💖</h1>
+    <p>Search and relive your best memories with friends ✨</p>
+  </header>
+
+  <div class="search-box">
+    <input type="text" id="search" placeholder="🔍 Search by name..." oninput="searchFriend()">
+  </div>
+
+  <div class="tag-list">
+    <button onclick="filterTag('kavin')">Kavin</button>
+    <button onclick="filterTag('sano')">Sano</button>
+    <button onclick="filterTag('sanjeewan')">San</button>
+  </div>
+
+  <div class="gallery" id="gallery">
+    <!-- friend images remain same -->
+    <div class="friend" data-name="kavin"><img src="New folder/kavin.jpg" alt="kavin"><p>Kavin</p></div>
+    <div class="friend" data-name="kavin"><img src="New folder/kavin1.jpg" alt="kavin"><p>Kavin</p></div>
+    <div class="friend" data-name="kavin"><img src="New folder/kavin2.jpg" alt="kavin"><p>Kavin</p></div>
+    <div class="friend" data-name="kavin"><img src="New folder/kavin3.jpg" alt="kavin"><p>Kavin</p></div>
+    <div class="friend" data-name="kavin"><img src="New folder/kavin4.jpg" alt="kavin"><p>Kavin</p></div>
+
+    <div class="friend" data-name="sano"><img src="sano/sano.jpg" alt="sano"><p>Sano</p></div>
+    <div class="friend" data-name="sano"><img src="sano/sano1.jpg" alt="sano"><p>Sano</p></div>
+    <div class="friend" data-name="sano"><img src="sano/sano2.jpg" alt="sano"><p>Sano</p></div>
+    <div class="friend" data-name="sano"><img src="sano/sano4.jpg" alt="sano"><p>Sano</p></div>
+
+    <div class="friend" data-name="sanjeewan"><img src="san/sanj.jpg" alt="san"><p>San</p></div>
+    <div class="friend" data-name="sanjeewan"><img src="san/sanj1.jpg" alt="san"><p>San</p></div>
+    <div class="friend" data-name="sanjeewan"><img src="san/sanj2.jpg" alt="san"><p>San</p></div>
+    <div class="friend" data-name="sanjeewan"><img src="san/sanj4.jpg" alt="san"><p>San</p></div>
+    <div class="friend" data-name="sanjeewan"><img src="san/sanj5.jpg" alt="san"><p>San</p></div>
+  </div>
+
+  <div class="modal" id="modal">
+    <img id="modal-img" src="" alt="">
+    <div class="controls">
+      <button onclick="prevImage()">⬅️ Prev</button>
+      <button onclick="nextImage()">Next ➡️</button>
+    </div>
+  </div>
+
+  <footer>
+    Made with ❤️ to cherish precious memories with friends 🌸
+  </footer>
+
+  <script>
+    let currentIndex = 0;
+    let visibleImages = [];
+
+    function searchFriend() {
+      const input = document.getElementById("search").value.trim().toLowerCase();
+      filterFriends(input);
+    }
+
+    function filterTag(tag) {
+      document.getElementById("search").value = tag;
+      filterFriends(tag);
+    }
+
+    function filterFriends(name) {
+      const friends = document.getElementsByClassName("friend");
+      visibleImages = [];
+
+      for (let i = 0; i < friends.length; i++) {
+        const friendName = friends[i].getAttribute("data-name").toLowerCase();
+        if (name !== "" && friendName.includes(name)) {
+          friends[i].style.display = "flex";
+          friends[i].classList.add("show");
+          visibleImages.push(friends[i].querySelector('img'));
+        } else {
+          friends[i].style.display = "none";
+          friends[i].classList.remove("show");
+        }
+      }
+    }
+
+    window.onload = function() {
+      searchFriend();
+    };
+
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modal-img');
+
+    document.querySelectorAll('.friend img').forEach((img, index) => {
+      img.addEventListener('click', () => {
+        modal.style.display = 'flex';
+        modalImg.src = img.src;
+        currentIndex = visibleImages.indexOf(img);
+      });
+    });
+
+    function prevImage() {
+      if (visibleImages.length > 0) {
+        currentIndex = (currentIndex - 1 + visibleImages.length) % visibleImages.length;
+        modalImg.src = visibleImages[currentIndex].src;
+      }
+    }
+
+    function nextImage() {
+      if (visibleImages.length > 0) {
+        currentIndex = (currentIndex + 1) % visibleImages.length;
+        modalImg.src = visibleImages[currentIndex].src;
+      }
+    }
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
